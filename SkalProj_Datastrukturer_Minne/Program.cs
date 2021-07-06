@@ -20,6 +20,7 @@ namespace SkalProj_Datastrukturer_Minne
                     + "\n2. Examine a Queue"
                     + "\n3. Examine a Stack"
                     + "\n4. CheckParanthesis"
+                    + "\n5. Reverse text"
                     + "\n0. Exit the application");
                 char input = ' '; //Creates the character input to be used with the switch-case below.
                 try
@@ -45,6 +46,9 @@ namespace SkalProj_Datastrukturer_Minne
                     case '4':
                         CheckParenthesis2();
                         break;
+                    case '5':
+                        ReverseText();
+                        break;
                     /*
                      * Extend the menu to include the recursive 
                      * and iterative exercises.
@@ -64,14 +68,22 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineList()
         {
-            /*
+            /* Svar på fråor avs ExamineList:
+             * 2-4 Listan kapacitet: verkar som capaciten fördubblas när den behöver ökas vilket verkar rimligt för en växande list
+             * 5 Kapaciten minskar ej när element tas bort - ombesörjs av garbage collection när programmet kört färdigt
+             * 6 Kan tänkbora mig att arrayer kräver mindre overhead än listor och att det då går att göra t ex beräkning snabbare
+             * Om man definierar en array i en metod där elementen används för beräkningar av ett resultat och elementen sedan inte
+             * används av anroparen kan jag tänka mig att det minnet kan frigörass sedan
+             * 
              * Loop this method untill the user inputs something to exit to main menue.
              * Create a switch statement with cases '+' and '-'
              * '+': Add the rest of the input to the list (The user could write +Adam and "Adam" would be added to the list)
              * '-': Remove the rest of the input from the list (The user could write -Adam and "Adam" would be removed from the list)
              * In both cases, look at the count and capacity of the list
              * As a default case, tell them to use only + or -
-             * Below you can see some inspirational code to begin working.
+             * Below you can see some inspirational code to begin working
+             * 
+             * Lagt till ett val "q" för att hoppa ur examine list. Vore bättre med en specialtangent som ESC eller ngt ctrl tecken
             */
 
             List<string> theList = new List<string>();
@@ -181,13 +193,15 @@ namespace SkalProj_Datastrukturer_Minne
                         Console.WriteLine("Unknown command please enter '+','-' or 'q' at beginning of line");
                         break;
                 }
-                /*                if (inputLineCount % 5 == 0)
+                /*
+                                if (inputLineCount % 5 == 0)
                                 {
                                     listCap = theList.Capacity;
                                     Console.WriteLine("Capacity = {0} No of added = {1} No of deleted = {2}", listCap, noAdd, noDel);
                                     Console.WriteLine("Capacity = {0} ", listCap);
                                     Console.WriteLine($"listlength = {theList.Count}");
-                                } */
+                                }
+                */
             }
             while (nav != 'q');
         }
@@ -197,7 +211,9 @@ namespace SkalProj_Datastrukturer_Minne
         /// </summary>
         static void ExamineStack()
         {
-            /*
+            /* Att anända en stack för simulera en kö på Ica vore som att be de köande ställa sig i kö ett hörn och sedan 
+             * vinka in dem till kassa med den siste först vilket nog inte skulle ses med blida ögon...
+             * 
              * Loop this method until the user inputs something to exit to main menue.
              * Create a switch with cases to push or pop items
              * Make sure to look at the stack after pushing and and poping to see how it behaves
@@ -263,133 +279,32 @@ namespace SkalProj_Datastrukturer_Minne
             while (nav != 'q');
         }
 
-
-        static void CheckParanthesis()
-        {
-            /*
-             * Use this method to check if the paranthesis in a string is Correct or incorrect.
-             * Example of correct: (()), {}, [({})],  List<int> list = new List<int>() { 1, 2, 3, 4 };
-             * Example of incorrect: (()]), [), {[()}],  List<int> list = new List<int>() { 1, 2, 3, 4 );
-             */
- //           string popped;
-            char tecken, nav = ' ';
-            Par_pos item = new Par_pos();
-            Stack<Par_pos> stack = new Stack<Par_pos>();
-            do
-            {
-                string input = Console.ReadLine();
-                nav = input[0];
-                string value = input[1..];
-                
-
-                switch (nav)
-                {
-                    case '+':
-                        for (int i = 0; i < value.Length; i++)
-                        {
-                            tecken = (char)value[i];
-                            if (tecken == '(' || tecken == '{' || tecken == '[')
-                            {
-                                item.Par = (char)value[i];
-                                item.Pos = i;
-                                stack.Push(item);
-                            }
-                            else if (tecken == ')' || tecken == '}' || tecken == ']')
-                            {
-                                if (stack.Count == 0 || !stack.TryPop(out item))
-                                {
-                                    Console.WriteLine("The stack is empty -> nothing to pop");
-                                }
-                                else
-                                {
-                                    foreach (Par_pos obj in stack)
-                                        Console.Write("    {0}    {1}", obj.Pos, obj.Par);
-                                    Console.WriteLine();
-
-                                    switch (item.Par)
-                                    {
-                                        case '(':
-                                            if (tecken != ')') Console.WriteLine("Error! ) expected to match ( at pos {0}", item.Pos);
-                                            else
-                                            {
-                                                Console.WriteLine("pos {0} matching {1} at pos {2}", i, item.Par, item.Pos);
-                                            }
-
-                                            //                                           else Writelog(i);
-                                            break;
-                                        case '{':
-                                            if (tecken != '}') Console.WriteLine("Error! } expected to match { at pos { 0}", item.Pos);
-                                            else
-                                            {
-                                                Console.WriteLine("pos {0} matching {1} at pos {2}", i, item.Par, item.Pos);
-                                            }
- //                                           Writelog(i, item);
-                                            break;
-                                        case '[':
-                                            if (tecken != ']') Console.WriteLine("Error! ] expected to match [ at pos { 0}", item.Pos);                                           Console.WriteLine("pos {0} matching {1} at pos {2}", i, item.Par, item.Pos);
- //                                           else
- //                                           {
-  //                                              Console.WriteLine("pos {0} matching {1} at pos {2}", i, item.Par, item.Pos);
-   //                                         }
-
-
-                                            //                                           else Par_pos.Writelog(i, item);
-
-                                            break;
-
-                                        default:
-
-                                            Console.WriteLine(" Error should not enter this default statement!");
-                                            foreach (Par_pos obj in stack)
-                                                Console.Write("    {0}    {1}", obj.Pos, obj.Par);
-                                            Console.WriteLine();
-                                            stack.Clear();
-                                            break;
-                                    }
-
-
-                                }
-                            }
-                        }
-                        break;
-
-                    case '-':
-                        break;
-
-                    case 'q':
-                        if (stack.Count != 0)
-                        {
-                            foreach (Par_pos obj in stack)
-                                Console.Write("    {0}    {1}", obj.Pos, obj.Par);
-                            Console.WriteLine();
-                            stack.Clear();
-                        }
-                        return;
-                        break;
-                    default:
-                        //Console.WriteLine("Unknown command " + nav.ToString + " please enter '+','-' or 'q' at beginning of line");
-                        Console.WriteLine("Unknown command please enter '+','-' or 'q' at beginning of line");
-                        break;
-                }
-            } while (nav != 'q');
-            /*                if (inputLineCount % 5 == 0)
-                            {
-                                listCap = theList.Capacity;
-                                Console.WriteLine("Capacity = {0} No of added = {1} No of deleted = {2}", listCap, noAdd, noDel);
-                                Console.WriteLine("Capacity = {0} ", listCap);
-                                Console.WriteLine($"listlength = {theList.Count}");
-                            } */
-        }
-
         static void CheckParenthesis2()
         {
             bool isCorrect = true;
 
+            static char lpar(char letter)
+            {
+                if (letter == ')') return '(';
+                if (letter == '}') return '{';
+                if (letter == ']') return '[';
+                Console.WriteLine("Jävulen; letter is {0} ",letter);
+                return '\0';
+            }    
+
+
             Console.WriteLine("Please enter a string: ");
             string input = Console.ReadLine();
-
             var stack = new Stack<char>();
 
+            /*
+            var leftpar = new Dictionary<char, char>(){
+            {')' , '('},
+            {'}' , '{'},
+            {']' , '['}
+            };
+            */
+             
             foreach (var letter in input)
             {
                 if (letter == '(' || letter == '{' || letter == '[')
@@ -399,11 +314,11 @@ namespace SkalProj_Datastrukturer_Minne
 
                 else if (letter == ')' || letter == '}' || letter == ']')
                 {
-                    //if (stack.Count == 0 || stack.Pop() != "motsatta tecknet" )
-                    //{
-                    //    isCorrect = false;
-                    //    break;
-                    //}
+                    if (stack.Count == 0 || stack.Pop() != lpar(letter))
+                    {
+                        isCorrect = false;
+                        break;
+                    }
                 }
             }
 
@@ -417,50 +332,26 @@ namespace SkalProj_Datastrukturer_Minne
             }
         }
 
-    }
-
-
-
-    public class Par_pos
-    {
-        public int Pos = 0;
-        public char Par = '\0';
-
-//        public static void Writelog(int i)
-//       {
-//            Console.WriteLine("pos {0} matching {1} at pos {2}", i, Par, Pos);
-//        }
-    }
-}
-    //
-    /*public class PushnPop
-    {
-        private string str;
-        private int index;
-
-        public int Push(char ch)
+        static void ReverseText()
         {
-            // str += ToString(ch);
-            str = str + ch;
-            Console.WriteLine(str);
-            return index++;
+         
+            Console.WriteLine("Please enter a string: ");
+            string input = Console.ReadLine();
+
+            var stack = new Stack<char>();
+
+            foreach (var letter in input)
+                 stack.Push(letter);
+
+            while (stack.Count > 0)
+                Console.Write(stack.Pop());
+            Console.WriteLine();
+               
+            }
         }
-        //   public int Push(int ipos, char ch)
 
-    /*    public char Pop() {
-            char ch str.this[--index];
-            return ch; 
-        } */
-
-    /*  public void StackTest()
-      {
-          var stack = new Stack<string>();
-          stack.Push("Hej");
-          stack.Push("jag");
-          stack.Pop();
+    }
 
 
-
-      }*/
-
+   
 
